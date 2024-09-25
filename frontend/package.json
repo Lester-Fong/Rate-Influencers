@@ -1,0 +1,27 @@
+{
+  "name": "rateinfluencers",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "flowbite": "^2.5.1",
+    "oh-vue-icons": "^1.0.0-rc3",
+    "pinia": "^2.1.4",
+    "sweetalert2": "^11.14.1",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "vue-star-rating": "^2.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "vite": "^4.4.6"
+  }
+}
