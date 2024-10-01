@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdministratorController;
 
 // Login Admin
+
 Route::post("/login", [AdministratorController::class, "login"]);
 
 // Dislay all Influencers
@@ -15,6 +16,5 @@ Route::get("/{slug}", [InfluencerController::class, "show"]);
 Route::post("/{slug}", [CommentController::class, "store"]);
 
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+// Route::middleware("auth:sanctum")->group(function() {
+// });
