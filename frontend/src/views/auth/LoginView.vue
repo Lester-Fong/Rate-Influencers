@@ -6,12 +6,12 @@
       <form class="rounded pt-6 pb-8 mb-4">
         <div class="mb-4">
           <label class="block text-teal-500 text-sm font-bold mb-2" for="email"> Email </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-teal-500 leading-tight mb-3 focus:outline-none focus:shadow-outline" v-model="email" type="email" placeholder="Email" />
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight mb-3 focus:outline-none focus:shadow-outline" v-model="email" type="email" placeholder="Email" />
           <p class="text-red-500 text-xs italic">{{ email_error }}</p>
         </div>
         <div class="mb-6">
           <label class="block text-teal-500 text-sm font-bold mb-2" for="password"> Password </label>
-          <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-teal-500 mb-3 leading-tight focus:outline-none focus:shadow-outline" v-model="password" type="password" placeholder="************" />
+          <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3D mb-3 leading-tight focus:outline-none focus:shadow-outline" v-model="password" type="password" placeholder="************" />
           <p class="text-red-500 text-xs italic">{{ password_error }}</p>
         </div>
         <div class="flex items-center justify-between">
@@ -28,9 +28,9 @@ import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 
 const isLoading = ref(false);
-const email = ref("");
+const email = ref("arthur.white@example.net");
 const email_error = ref("");
-const password = ref("");
+const password = ref("Test_123");
 const password_error = ref("");
 
 const authStore = useAuthStore();
@@ -63,19 +63,24 @@ const handleClearFields = () => {
 };
 
 const onSubmit = async () => {
-  // if (validationPassed()) {
-  const response = await authStore.login({
-    email: email.value,
-    password: password.value,
-  });
-  console.log(response);
-  if (response.error) {
-    email_error.value = response.email[0];
-    password_error.value = response.password[0];
-  } else {
-    handleClearFields();
-    console.log("authStore: ", authStore.admin_record);
+  if (validationPassed()) {
+    const successCSRFToken = await authStore.getCSRFToken();
+    if (successCSRFToken) {
+      isLoading.value = true;
+      const response = await authStore.login({
+        email: email.value,
+        password: password.value,
+      });
+
+      if (response.error) {
+        email_error.value = response.email[0];
+        password_error.value = response.password[0];
+      } else {
+        handleClearFields();
+        const token = response.token; // TODO! MAKE SURE TO ENCRYPT THIS TOKEN
+        sessionStorage.setItem("api-token", token);
+      }
+    }
   }
-  // }
 };
 </script>
