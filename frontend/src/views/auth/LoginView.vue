@@ -1,5 +1,5 @@
 <template>
-  <div class="loading" v-if="isLoading"></div>
+  <div class="ir-loader" v-if="isLoading"></div>
   <form class="w-full flex items-center justify-center flex-col">
     <h1 class="text-teal-300 text-2xl font-semibold ir-text">Rate Influencers</h1>
     <div class="w-full max-w-xs">
@@ -15,7 +15,7 @@
           <p class="text-red-500 text-xs italic">{{ password_error }}</p>
         </div>
         <div class="flex items-center justify-between">
-          <button class="bg-teal-500 hover:bg-teal-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="onSubmit">Sign In</button>
+          <button class="bg-teal-500 hover:bg-teal-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="handleSubmit">Sign In</button>
           <a class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-200" href="#"> Forgot Password? </a>
         </div>
       </form>
@@ -23,9 +23,13 @@
   </form>
 </template>
 
+
 <script setup>
+import cryptojs from "crypto-js";
+import { getCookie } from "@/utils/helper";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 const isLoading = ref(false);
 const email = ref("arthur.white@example.net");
@@ -33,6 +37,7 @@ const email_error = ref("");
 const password = ref("Test_123");
 const password_error = ref("");
 
+const router = useRouter();
 const authStore = useAuthStore();
 
 const validationPassed = () => {
@@ -62,10 +67,11 @@ const handleClearFields = () => {
   password_error.value = "";
 };
 
-const onSubmit = async () => {
+const handleSubmit = async () => {
   if (validationPassed()) {
-    const successCSRFToken = await authStore.getCSRFToken();
-    if (successCSRFToken) {
+    const hasCSRFToken = getCookie("XSRF-TOKEN") ?? (await authStore.getCSRFToken());
+
+    if (hasCSRFToken) {
       isLoading.value = true;
       const response = await authStore.login({
         email: email.value,
@@ -77,8 +83,10 @@ const onSubmit = async () => {
         password_error.value = response.password[0];
       } else {
         handleClearFields();
-        const token = response.token; // TODO! MAKE SURE TO ENCRYPT THIS TOKEN
+        const token = cryptojs.AES.encrypt(response.token, import.meta.env.VITE_SECRET_PASSPHRASE); // Encrypted token
         sessionStorage.setItem("api-token", token);
+        isLoading.value = false;
+        router.push({ name: "dashboard" });
       }
     }
   }
