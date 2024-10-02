@@ -4,9 +4,12 @@ const aboutView = () => import("../views/AboutView.vue");
 const InfluencerView = () => import("../views/InfluencerView.vue");
 const LoginView = () => import("../views/auth/LoginView.vue");
 
+const DashboardView = () => import("../views/portal/DashboardView.vue");
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // ===================  LOGIN ROUTES  =================== >
     {
       path: "/login",
       meta: {
@@ -21,6 +24,22 @@ const router = createRouter({
         },
       ],
     },
+    //  ===================  PORTAL ROUTES  =================== >
+    {
+      path: "/admin",
+      meta: {
+        requiresAuth: true,
+        layout: "portal",
+      },
+      children: [
+        {
+          path: "dashboard",
+          name: "dashboard",
+          component: DashboardView,
+        },
+      ],
+    },
+    // ===================  PUBLIC ROUTES  =================== >
     {
       path: "/",
       meta: {
@@ -46,6 +65,24 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const token = sessionStorage.getItem("api-token");
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!token) {
+      next({
+        name: "login",
+      });
+    }
+  } else {
+    if (token) {
+      sessionStorage.removeItem("api-token");
+    }
+  }
+  next(); // make sure to always call next()!
 });
 
 export default router;
