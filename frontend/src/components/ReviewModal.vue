@@ -51,7 +51,7 @@
 <script setup>
 import Swal from "sweetalert2";
 import { Modal } from "flowbite";
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import { useInfluencerStore } from "../stores/influencer";
 
 const isLoading = ref(false);

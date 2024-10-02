@@ -14,7 +14,6 @@ import { ref } from "vue";
 let props = defineProps({
   data: {
     type: Object,
-    required: true,
   },
 });
 
