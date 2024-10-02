@@ -1,17 +1,24 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-axios.defaults.baseURL = "/"; // This ensures Axios respects the proxy
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
+axios.defaults.baseURL = "/api"; // This ensures Axios respects the proxy
 
 export const useInfluencerStore = defineStore("influencerStore", {
   actions: {
     async getInfluencers() {
-      const response = await axios.get("/api/");
-      return response.data;
+      try {
+        const response = await axios.get("/api/");
+        if (typeof response.data === "object") {
+          return response.data;
+        } else {
+          return { error: true };
+        }
+      } catch (error) {
+        return { error: true };
+      }
     },
 
     async showInfluencer(slug) {
+      // TRY CATCH AND DISPLAY ERROR MESSAGE
       const response = await axios.get(`/api/${slug}`);
       return response.data;
     },
