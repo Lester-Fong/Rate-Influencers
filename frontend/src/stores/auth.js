@@ -1,7 +1,8 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import { checkTokenAndSetAxios } from "@/utils/helper";
+checkTokenAndSetAxios();
 axios.defaults.baseURL = "/api"; // This ensures Axios respects the proxy
-axios.defaults.withCredentials = true;
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
