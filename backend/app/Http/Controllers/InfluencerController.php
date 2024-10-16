@@ -26,6 +26,5 @@ class InfluencerController extends Controller
                 return response()->json(['error'=> true, 'message'=> 'Internal Server Error'], 500);
            }
         }
-        return response()->json(['message'=> 'This influencer is not yet recognized.'],404);
     }
 }
