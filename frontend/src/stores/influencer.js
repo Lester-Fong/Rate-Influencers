@@ -18,7 +18,7 @@ export const useInfluencerStore = defineStore("influencerStore", {
     },
 
     async showInfluencer(slug) {
-      // TRY CATCH AND DISPLAY ERROR MESSAGE
+      // TODO! => TRY CATCH AND DISPLAY ERROR MESSAGE
       const response = await axios.get(`/api/${slug}`);
       return response.data;
     },
