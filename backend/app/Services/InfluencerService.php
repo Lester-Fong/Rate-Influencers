@@ -11,8 +11,15 @@ class InfluencerService
     public function showInfluencerBySlug($slug)
     {
         $influencer = Influencer::where('slug', $slug)->with('comments')->first();
-        $other_influencers = Influencer::where('slug', '!=', $slug)->inRandomOrder()->take(5)->get();
-
+        if (!$influencer) {
+            return [
+                "error" => true,
+                "message" => "This influencer is not yet recognized."
+            ];
+        } else {
+            $other_influencers = Influencer::where('slug', '!=', $slug)->inRandomOrder()->take(5)->get();
+        }
         return [$influencer, $other_influencers];
+
     }
 }
