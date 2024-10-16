@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Influencer;
+use App\Services\InfluencerService;
 
 class InfluencerController extends Controller
 {
@@ -16,15 +17,15 @@ class InfluencerController extends Controller
     }
 
 
-    public function show (string $slug) {
+    public function show (InfluencerService $influencerService, string $slug) {
         if (isset($slug)) {
-            $influencer = Influencer::where('slug', $slug)->with('comments')->first();
-            $other_influencers = Influencer::where('slug', '!=', $slug)->inRandomOrder()->take(5)->get();
-
-            return response()->json([$influencer,  $other_influencers]);
+           try {
+                $response = $influencerService->showInfluencerBySlug($slug);
+                return response()->json($response);
+           } catch (\Throwable $th) {
+                return response()->json(['error'=> true, 'message'=> 'Internal Server Error'], 500);
+           }
         }
-
         return response()->json(['message'=> 'This influencer is not yet recognized.'],404);
-
     }
 }
