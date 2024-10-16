@@ -82,10 +82,12 @@ const handleSubmit = async () => {
         email_error.value = response.email[0];
         password_error.value = response.password[0];
       } else {
+        isLoading.value = false;
+        if (!response) return;
+
         handleClearFields();
         const token = cryptojs.AES.encrypt(response.token, import.meta.env.VITE_SECRET_PASSPHRASE); // Encrypted token
         sessionStorage.setItem("api-token", token);
-        isLoading.value = false;
         router.push({ name: "dashboard" });
       }
     }
