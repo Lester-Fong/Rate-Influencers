@@ -5,15 +5,15 @@
       <hr class="mt-4 opacity-25 mx-4" />
     </div>
     <ul class="px-4 w-full">
-      <li class="pb-3 cursor-pointer text-gray-400 font-medium hover:text-sky-400">
+      <li class="pb-3 cursor-pointer ir-text-main font-medium hover:text-sky-400">
         <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
       </li>
-      <li class="pb-3 cursor-pointer text-gray-400 font-medium hover:text-sky-400">
-        <router-link :to="{ name: 'dashboard' }">Influencers</router-link>
+      <li class="pb-3 cursor-pointer ir-text-main font-medium hover:text-sky-400">
+        <router-link :to="{ name: 'influencerPortal' }">Influencers</router-link>
       </li>
-      <li class="pb-3 cursor-pointer text-gray-400 font-medium hover:text-sky-400">
-        <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
-      </li>
+      <!-- <li class="pb-3 cursor-pointer ir-text-main font-medium hover:text-sky-400">
+        <router-link :to="{ name: 'commmentsPortal' }">Comments</router-link>
+      </li> -->
     </ul>
   </div>
 </template>
