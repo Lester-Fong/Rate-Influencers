@@ -130,3 +130,7 @@ body {
   color: var(--bg-primary-color);
   height: 100%;
 }
+
+.ir-bg-primary {
+  background-color: var(--bg-primary-color);
+}
