@@ -16,5 +16,5 @@ Route::get("/{slug}", [InfluencerController::class, "show"]);
 Route::post("/{slug}", [CommentController::class, "store"]);
 
 
-// Route::middleware("auth:sanctum")->group(function() {
-// });
+Route::middleware("auth:sanctum")->group(function() {
+});
