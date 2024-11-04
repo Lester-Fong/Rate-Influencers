@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-between">
-    <aside class="w-80 h-screen ir-bg-primary">
+    <aside class="w-80 ir-bg-primary">
       <div class="flex items-center justify-between">
         <Sidebar />
       </div>
