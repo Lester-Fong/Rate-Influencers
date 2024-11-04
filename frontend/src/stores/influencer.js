@@ -8,7 +8,7 @@ export const useInfluencerStore = defineStore("influencerStore", {
       try {
         const response = await axios.get("/api/");
         if (typeof response.data === "object") {
-          return response.data;
+          return response.data.data;
         } else {
           return { error: true };
         }
@@ -18,9 +18,12 @@ export const useInfluencerStore = defineStore("influencerStore", {
     },
 
     async showInfluencer(slug) {
-      // TODO! => TRY CATCH AND DISPLAY ERROR MESSAGE
-      const response = await axios.get(`/api/${slug}`);
-      return response.data;
+      try {
+        const response = await axios.get(`/api/${slug}`);
+        return response.data;
+      } catch (error) {
+        return { error: true };
+      }
     },
 
     async addInfluencerComment(data) {
