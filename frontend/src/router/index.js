@@ -5,6 +5,8 @@ const InfluencerView = () => import("../views/InfluencerView.vue");
 const LoginView = () => import("../views/auth/LoginView.vue");
 
 const DashboardView = () => import("../views/portal/DashboardView.vue");
+const InfluencerPortalView = () => import("../views/portal/InfluencerView.vue");
+const CommentsPortalView = () => import("../views/portal/CommentsView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +38,16 @@ const router = createRouter({
           path: "dashboard",
           name: "dashboard",
           component: DashboardView,
+        },
+        {
+          path: "influencer",
+          name: "influencerPortal",
+          component: InfluencerPortalView,
+        },
+        {
+          path: "comments",
+          name: "commentsPortal",
+          component: CommentsPortalView,
         },
       ],
     },
