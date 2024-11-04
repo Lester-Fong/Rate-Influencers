@@ -134,3 +134,16 @@ body {
 .ir-bg-primary {
   background-color: var(--bg-primary-color);
 }
+
+/* DATATABLES */
+.vtl-paging-count-label, .vtl-paging-page-label {
+  margin: 0 .55rem !important;
+}
+
+.vtl-paging-change-div {
+  display: none !important;
+}
+
+.vtl-row {
+  justify-content: space-around;
+}
