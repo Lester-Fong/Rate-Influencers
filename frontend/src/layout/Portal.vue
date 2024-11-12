@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between">
+  <div class="flex items-stretch justify-between">
     <aside class="w-80 ir-bg-primary">
       <div class="flex items-center justify-between">
         <Sidebar />
