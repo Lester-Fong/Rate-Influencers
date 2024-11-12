@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h1 class="mb-5 ir-text font-bold text-gray-500">INFLUENCERS</h1>
+    <InfluencerModal @success="onSuccess" />
+
+    <div class="mb-5 flex items-center justify-between">
+      <h1 class="ir-text font-bold text-gray-500">INFLUENCERS</h1>
+      <button @click="onCreateInfluencer" class="rounded-lg px-5 py-2 bg-rose-800 text-white hover:bg-rose-600">Create</button>
+    </div>
     <table-lite :is-loading="table.isLoading" :columns="table.columns" :rows="table.rows" :total="table.totalRecordCount" :sortable="table.sortable" :messages="table.messages" @do-search="doSearch" @is-finished="table.isLoading = false" />
   </div>
 </template>
@@ -9,7 +14,11 @@
 import axios from "axios";
 import { reactive, onMounted, ref } from "vue";
 import TableLite from "vue3-table-lite";
+import InfluencerModal from "../../components/InfluencerModal.vue";
 import { useInfluencerStore } from "../../stores/influencer";
+
+//modal imports from flowchart
+import { Modal } from "flowbite";
 
 const influencerStore = useInfluencerStore();
 const table = reactive({
@@ -74,9 +83,22 @@ const doSearch = (offset, limit, order, sort) => {
   axios.get(url).then((response) => {
     // refresh table rows
     table.rows.value = response.rows;
-    table.totalRecordCount.value = response.count;
+    table.totalRecordCount = response.count;
     table.sortable.value.order.value = order;
     table.sortable.value.sort.value = sort;
   });
+};
+
+const onCreateInfluencer = () => {
+  // show modal to create influencer
+  const $modalElement = document.querySelector("#influencer_modal");
+  if ($modalElement) {
+    const modal = new Modal($modalElement, { closable: false });
+    modal.show();
+  }
+};
+
+const onSuccess = () => {
+  onPopulateInfluencers();
 };
 </script>
