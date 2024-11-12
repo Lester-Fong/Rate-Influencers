@@ -86,10 +86,11 @@ const igLink = ref("");
 const igLink_error = ref("");
 const tiktokLink = ref("");
 const tiktokLink_error = ref("");
+const profilePicture = ref("");
+const profilePicture_error = ref("");
 
 const influencerStore = useInfluencerStore();
 const emit = defineEmits(["success"]);
-
 const props = defineProps(["slug"]);
 
 const onCloseModal = () => {
