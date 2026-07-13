@@ -2,10 +2,10 @@
   <section>
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-700">Review moderation</h1>
-        <p class="mt-1 text-sm text-gray-500">Approve reviews for public display or reject them.</p>
+        <h1 class="admin-heading">Review moderation</h1>
+        <p class="admin-muted mt-1 text-sm">Approve reviews for public display or reject them.</p>
       </div>
-      <button type="button" class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :disabled="isLoading" @click="loadReviews">
+      <button type="button" class="admin-theme-button px-4 py-2 text-sm font-semibold" :disabled="isLoading" @click="loadReviews">
         Refresh
       </button>
     </div>
@@ -16,48 +16,42 @@
         :key="option.value"
         type="button"
         class="rounded-full px-4 py-2 text-sm font-semibold"
-        :class="activeFilter === option.value ? 'bg-emerald-800 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'"
+        :class="activeFilter === option.value ? 'bg-emerald-700 text-white' : 'admin-theme-button'"
         @click="activeFilter = option.value"
       >
         {{ option.label }} ({{ statusCount(option.value) }})
       </button>
     </div>
 
-    <div v-if="isLoading" class="rounded-lg bg-white p-10 text-center text-gray-500">Loading reviews…</div>
+    <div v-if="isLoading" class="admin-panel admin-muted p-10 text-center" role="status">Loading reviews...</div>
 
-    <div v-else-if="errorMessage" class="rounded-lg bg-red-50 p-6 text-red-700" role="alert">
+    <div v-else-if="errorMessage" class="admin-panel border-red-300 p-6 text-red-600" role="alert">
       <p>{{ errorMessage }}</p>
       <button type="button" class="mt-2 font-semibold underline" @click="loadReviews">Try again</button>
     </div>
 
-    <div v-else-if="filteredReviews.length === 0" class="rounded-lg bg-white p-10 text-center text-gray-500">
+    <div v-else-if="filteredReviews.length === 0" class="admin-panel admin-muted p-10 text-center">
       No {{ activeFilter === "all" ? "" : `${activeFilter} ` }}reviews found.
     </div>
 
-    <div v-else class="overflow-x-auto rounded-lg bg-white shadow">
-      <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
-        <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+    <div v-else class="admin-panel overflow-x-auto">
+      <table class="admin-table min-w-[960px] text-left text-sm">
+        <thead class="text-xs uppercase tracking-wide">
           <tr>
-            <th class="px-5 py-3">Reviewer</th>
-            <th class="px-5 py-3">Influencer</th>
-            <th class="px-5 py-3">Rating</th>
-            <th class="px-5 py-3">Review</th>
-            <th class="px-5 py-3">Status</th>
-            <th class="px-5 py-3">Submitted</th>
-            <th class="px-5 py-3 text-right">Actions</th>
+            <th>Reviewer</th><th>Influencer</th><th>Rating</th><th>Review</th><th>Status</th><th>Submitted</th><th class="text-right">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100 text-gray-700">
+        <tbody>
           <tr v-for="review in filteredReviews" :key="review.id" class="align-top">
-            <td class="whitespace-nowrap px-5 py-4 font-medium">{{ review.reviewer_name }}</td>
-            <td class="whitespace-nowrap px-5 py-4">{{ review.influencer?.name || "Unknown" }}</td>
-            <td class="whitespace-nowrap px-5 py-4">{{ review.rating }}/5</td>
-            <td class="max-w-md px-5 py-4">{{ review.review }}</td>
-            <td class="px-5 py-4">
+            <td class="whitespace-nowrap font-medium">{{ review.reviewer_name }}</td>
+            <td class="whitespace-nowrap">{{ review.influencer?.name || "Unknown" }}</td>
+            <td class="whitespace-nowrap">{{ review.rating }}/5</td>
+            <td class="max-w-md">{{ review.review }}</td>
+            <td>
               <span class="rounded-full px-3 py-1 text-xs font-semibold capitalize" :class="statusClass(review.status)">{{ review.status }}</span>
             </td>
-            <td class="whitespace-nowrap px-5 py-4">{{ formatDate(review.created_at) }}</td>
-            <td class="whitespace-nowrap px-5 py-4 text-right">
+            <td class="admin-muted whitespace-nowrap">{{ formatDate(review.created_at) }}</td>
+            <td class="whitespace-nowrap text-right">
               <button
                 v-if="review.status !== 'approved'"
                 type="button"
@@ -158,7 +152,7 @@ const statusClass = (status) => ({
   "bg-red-100 text-red-800": status === "rejected",
 });
 
-const formatDate = (value) => value ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(value)) : "—";
+const formatDate = (value) => value ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(value)) : "-";
 
 onMounted(loadReviews);
 </script>

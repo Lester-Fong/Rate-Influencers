@@ -1,25 +1,24 @@
 <template>
-  <div class="ir-loader" v-if="authStore.isLoading"></div>
-  <form class="w-full flex items-center justify-center flex-col" @submit.prevent="handleSubmit">
-    <h1 class="text-teal-300 text-2xl font-semibold ir-text">Rate Influencers</h1>
-    <div class="w-full max-w-xs">
-      <div class="rounded pt-6 pb-8 mb-4">
+  <form class="w-full max-w-sm" @submit.prevent="handleSubmit">
+    <p class="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-rose-300">Administrator access</p>
+    <h1 class="text-3xl font-bold text-white">Welcome back</h1>
+    <p class="mt-2 text-sm text-slate-300">Sign in to manage influencers and moderate reviews.</p>
+    <div class="pt-7">
         <div class="mb-4">
-          <label class="block text-teal-500 text-sm font-bold mb-2" for="email"> Email </label>
-          <input id="email" class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight mb-3 focus:outline-none focus:shadow-outline" v-model="email" type="email" autocomplete="email" placeholder="Email" />
-          <p class="text-red-500 text-xs italic">{{ email_error }}</p>
+          <label class="mb-2 block text-sm font-bold text-rose-100" for="email">Email</label>
+          <input id="email" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" v-model.trim="email" type="email" autocomplete="email" placeholder="arthur.white@example.net" />
+          <p class="mt-1 text-xs text-red-300">{{ email_error }}</p>
         </div>
         <div class="mb-6">
-          <label class="block text-teal-500 text-sm font-bold mb-2" for="password"> Password </label>
-          <input id="password" class="shadow appearance-none border rounded w-full py-2 px-3 mb-3 leading-tight focus:outline-none focus:shadow-outline" v-model="password" type="password" autocomplete="current-password" placeholder="************" />
-          <p class="text-red-500 text-xs italic">{{ password_error }}</p>
+          <label class="mb-2 block text-sm font-bold text-rose-100" for="password">Password</label>
+          <input id="password" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" v-model="password" type="password" autocomplete="current-password" placeholder="Enter your password" />
+          <p class="mt-1 text-xs text-red-300">{{ password_error }}</p>
         </div>
-        <p v-if="general_error" class="mb-4 text-red-500 text-sm" role="alert">{{ general_error }}</p>
-        <div class="flex items-center justify-between">
-          <button class="bg-teal-500 hover:bg-teal-900 disabled:opacity-60 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" :disabled="authStore.isLoading">Sign In</button>
-          <a class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-200" href="#"> Forgot Password? </a>
+        <p v-if="general_error" class="mb-4 rounded-lg bg-red-950/50 p-3 text-sm text-red-200" role="alert">{{ general_error }}</p>
+        <div>
+          <button class="ir-button-primary w-full px-5 py-3 disabled:opacity-60" type="submit" :disabled="authStore.isLoading">{{ authStore.isLoading ? "Signing in..." : "Sign in" }}</button>
         </div>
-      </div>
+        <p class="mt-5 text-xs text-slate-400">Local seed: arthur.white@example.net / Test_123</p>
     </div>
   </form>
 </template>
@@ -30,9 +29,9 @@ import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRoute, useRouter } from "vue-router";
 
-const email = ref("arthur.white@example.net");
+const email = ref("");
 const email_error = ref("");
-const password = ref("Test_123");
+const password = ref("");
 const password_error = ref("");
 const general_error = ref("");
 

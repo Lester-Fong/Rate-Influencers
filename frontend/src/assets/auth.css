@@ -1,45 +1,21 @@
-main {
-    width: 100%;
-    min-height: 100vh;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
+.auth-shell {
+  min-height: 100vh;
+  background: #071b25;
 }
 
-aside {
-    min-height: 100vh;
+.auth-art {
+  min-height: 100vh;
+  background-image: linear-gradient(rgb(6 25 34 / 25%), rgb(6 25 34 / 65%)), url("/assets/peakpx.jpg");
+  background-position: center;
+  background-size: cover;
 }
 
-.left {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url('/assets/peakpx.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    object-fit: cover;
-    opacity: .6;
+.auth-panel {
+  background: linear-gradient(145deg, #102c36, #06171f);
 }
 
-.right {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-/* DATATABLES */
-
-.dt-layout-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+@media (max-width: 767px) {
+  .auth-art {
+    min-height: 11rem;
+  }
 }

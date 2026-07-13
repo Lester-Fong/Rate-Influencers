@@ -9,66 +9,67 @@
 
     <div class="mb-6 flex items-center justify-between gap-4">
       <div>
-        <h1 class="ir-text text-xl font-bold text-gray-700">Influencers</h1>
-        <p class="mt-1 text-sm text-gray-500">Create and maintain influencer profiles.</p>
+        <h1 class="admin-heading">Influencers</h1>
+        <p class="admin-muted mt-1 text-sm">Create and maintain influencer profiles.</p>
       </div>
       <button
         type="button"
-        class="rounded-lg bg-rose-800 px-5 py-2 text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+        class="rounded-xl bg-rose-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-rose-600"
         @click="openCreateModal"
       >
         Create influencer
       </button>
     </div>
 
-    <div v-if="isLoading" class="rounded-lg bg-white p-8 text-center text-gray-500">
-      Loading influencers…
+    <div v-if="isLoading" class="admin-panel admin-muted p-8 text-center" role="status">
+      Loading influencers...
     </div>
 
-    <div v-else-if="errorMessage" class="rounded-lg border border-red-200 bg-red-50 p-5 text-red-700" role="alert">
+    <div v-else-if="errorMessage" class="admin-panel border-red-300 p-5 text-red-600" role="alert">
       <p>{{ errorMessage }}</p>
       <button type="button" class="mt-3 font-semibold underline" @click="loadInfluencers">Try again</button>
     </div>
 
-    <div v-else-if="influencers.length === 0" class="rounded-lg border border-dashed border-gray-300 bg-white p-10 text-center">
-      <h2 class="font-semibold text-gray-700">No influencers yet</h2>
-      <p class="mt-2 text-sm text-gray-500">Create the first influencer profile to populate the public grid.</p>
+    <div v-else-if="influencers.length === 0" class="admin-panel p-10 text-center">
+      <h2 class="font-semibold">No influencers yet</h2>
+      <p class="admin-muted mt-2 text-sm">Create the first influencer profile to populate the public grid.</p>
     </div>
 
-    <div v-else class="overflow-x-auto rounded-lg bg-white shadow">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+    <div v-else class="admin-panel overflow-x-auto">
+      <table class="admin-table min-w-[760px]">
+        <thead>
           <tr>
-            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Influencer</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Slug</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rating</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Reviews</th>
-            <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Actions</th>
+            <th class="text-left text-xs font-semibold uppercase tracking-wide">Influencer</th>
+            <th class="text-left text-xs font-semibold uppercase tracking-wide">Slug</th>
+            <th class="text-left text-xs font-semibold uppercase tracking-wide">Rating</th>
+            <th class="text-left text-xs font-semibold uppercase tracking-wide">Reviews</th>
+            <th class="text-right text-xs font-semibold uppercase tracking-wide">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100">
+        <tbody>
           <tr v-for="influencer in influencers" :key="influencer.id">
-            <td class="px-5 py-4">
+            <td>
               <div class="flex items-center gap-3">
                 <img
-                  v-if="influencer.profile_picture"
+                  v-if="influencer.profile_picture && !failedImageIds.has(influencer.id)"
                   :src="influencer.profile_picture"
                   :alt="`${influencer.name} profile`"
                   class="h-10 w-10 rounded-full object-cover"
+                  @error="failedImageIds.add(influencer.id)"
                 />
-                <div v-else class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 font-semibold text-gray-600">
+                <div v-else class="flex h-10 w-10 items-center justify-center rounded-full bg-rose-300/20 font-semibold text-rose-500">
                   {{ influencer.name.charAt(0).toUpperCase() }}
                 </div>
                 <div>
-                  <p class="font-medium text-gray-800">{{ influencer.name }}</p>
-                  <p class="max-w-xs truncate text-sm text-gray-500">{{ influencer.bio || "No bio" }}</p>
+                  <p class="font-semibold">{{ influencer.name }}</p>
+                  <p class="admin-muted max-w-xs truncate text-sm">{{ influencer.bio || "No bio" }}</p>
                 </div>
               </div>
             </td>
-            <td class="px-5 py-4 text-sm text-gray-600">{{ influencer.slug }}</td>
-            <td class="px-5 py-4 text-sm text-gray-600">{{ formatRating(influencer.rating) }}</td>
-            <td class="px-5 py-4 text-sm text-gray-600">{{ influencer.review_count }}</td>
-            <td class="px-5 py-4 text-right">
+            <td class="admin-muted text-sm">{{ influencer.slug }}</td>
+            <td class="admin-muted text-sm">{{ formatRating(influencer.rating) }}</td>
+            <td class="admin-muted text-sm">{{ influencer.review_count }}</td>
+            <td class="text-right">
               <button type="button" class="mr-4 font-medium text-blue-700 hover:text-blue-900" @click="openEditModal(influencer)">Edit</button>
               <button
                 type="button"
@@ -76,7 +77,7 @@
                 :disabled="deletingId === influencer.id"
                 @click="deleteInfluencer(influencer)"
               >
-                {{ deletingId === influencer.id ? "Deleting…" : "Delete" }}
+                {{ deletingId === influencer.id ? "Deleting..." : "Delete" }}
               </button>
             </td>
           </tr>
@@ -99,6 +100,7 @@ const errorMessage = ref("");
 const isModalOpen = ref(false);
 const selectedInfluencer = ref(null);
 const deletingId = ref(null);
+const failedImageIds = ref(new Set());
 
 const loadInfluencers = async () => {
   isLoading.value = true;

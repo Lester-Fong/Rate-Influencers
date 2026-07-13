@@ -1,139 +1,125 @@
 <template>
-  <div class="ir-loader" v-if="isLoading"></div>
-  <div id="modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden rounded-lg w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-2xl max-h-full">
-      <!-- Modal content -->
-      <div class="relative bg-slate-700 rounded-lg shadow">
-        <form class="p-6 space-y-6 text-white" @submit.prevent="handleSubmit">
-          <h3 class="text-3xl font-bold ir-text text-center">Add a Review</h3>
-          <div class="flex justify-between items-center gap-x-5">
-            <div class="w-full">
-              <label for="name" class="ir-text block mb-2 text-xl font-medium">Name</label>
-              <input
-                id="name"
-                type="text"
-                class="ir-text block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                v-model="name"
-              />
-              <span class="text-red-500 ir-text text-sm">{{ name_error }}</span>
-            </div>
-            <div class="w-full">
-              <span class="ir-text block mb-2 text-xl font-medium">Rating</span>
-              <star-rating :star-size="33" :increment="1" active-color="#a7d708" inactive-color="transparent" border-color="#F4978E" :border-width="3" :show-rating="false" :padding="10" v-model:rating="rating"> </star-rating>
-              <span class="text-red-500 ir-text text-sm">{{ rating_error }}</span>
-            </div>
-          </div>
-          <div>
-            <label for="message" class="ir-text block mb-2 text-xl font-medium">Your Comment</label>
-            <textarea
-              id="message"
-              v-model="comment"
-              class="ir-text block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-h-40 min-h-20"
-              placeholder="Write your thoughts here..."
-            ></textarea>
-            <span class="text-red-500 ir-text text-sm">{{ comment_error }}</span>
-          </div>
-          <div class="flex justify-end space-x-2 rounded-b">
-            <button
-              type="button"
-              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              @click="onCloseModal"
-            >
-              Cancel
-            </button>
-            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit" :disabled="isLoading">
-              {{ isLoading ? "Submitting…" : "Submit" }}
-            </button>
-          </div>
-        </form>
+  <div
+    v-if="open"
+    class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/70 p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="review-modal-title"
+    @click.self="closeModal"
+    @keydown.esc="closeModal"
+  >
+    <form class="ir-container w-full max-w-xl p-6 sm:p-8" @submit.prevent="handleSubmit">
+      <div class="mb-6 flex items-center justify-between gap-4">
+        <h2 id="review-modal-title" class="ir-text-main text-2xl font-bold">Write a review</h2>
+        <button type="button" class="rounded-full p-2 text-2xl text-rose-200 hover:bg-white/10" :disabled="isLoading" aria-label="Close review form" @click="closeModal">&times;</button>
       </div>
-    </div>
+
+      <div class="space-y-5">
+        <div>
+          <label for="reviewer-name" class="mb-2 block font-semibold text-rose-100">Your name</label>
+          <input id="reviewer-name" ref="nameInput" v-model.trim="form.reviewer_name" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" type="text" maxlength="50" autocomplete="name" />
+          <p v-if="fieldError('reviewer_name')" class="mt-1 text-sm text-red-300">{{ fieldError("reviewer_name") }}</p>
+        </div>
+
+        <fieldset>
+          <legend class="mb-2 font-semibold text-rose-100">Rating</legend>
+          <star-rating :star-size="32" :increment="1" active-color="#a7d708" inactive-color="transparent" border-color="#f4978e" :border-width="2" :show-rating="false" v-model:rating="form.rating" />
+          <p v-if="fieldError('rating')" class="mt-1 text-sm text-red-300">{{ fieldError("rating") }}</p>
+        </fieldset>
+
+        <div>
+          <label for="review-message" class="mb-2 block font-semibold text-rose-100">Your review</label>
+          <textarea id="review-message" v-model.trim="form.review" class="min-h-32 w-full resize-y rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" maxlength="500" placeholder="Share your thoughts about this creator's public content."></textarea>
+          <div class="mt-1 flex justify-between gap-3 text-sm">
+            <p v-if="fieldError('review')" class="text-red-300">{{ fieldError("review") }}</p>
+            <span class="ml-auto text-rose-200/70">{{ form.review.length }}/500</span>
+          </div>
+        </div>
+
+        <p v-if="errorMessage" class="rounded-lg bg-red-950/60 p-3 text-sm text-red-200" role="alert">{{ errorMessage }}</p>
+      </div>
+
+      <div class="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button type="button" class="rounded-xl border border-white/25 px-5 py-3 text-rose-100 hover:bg-white/10" :disabled="isLoading" @click="closeModal">Cancel</button>
+        <button class="ir-button-primary px-6 py-3 disabled:cursor-not-allowed disabled:opacity-60" type="submit" :disabled="isLoading">
+          {{ isLoading ? "Submitting..." : "Submit for approval" }}
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script setup>
 import Swal from "sweetalert2";
-import { Modal } from "flowbite";
-import { ref } from "vue";
+import { nextTick, reactive, ref, watch } from "vue";
 import { useReviewStore } from "@/stores/review";
 
-const isLoading = ref(false);
-const name = ref("");
-const name_error = ref("");
-const rating = ref(0);
-const rating_error = ref("");
-const comment = ref("");
-const comment_error = ref("");
+const props = defineProps({
+  open: Boolean,
+  slug: {
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["close", "success"]);
 const reviewStore = useReviewStore();
-const emit = defineEmits(["success"]);
+const nameInput = ref(null);
+const isLoading = ref(false);
+const errors = ref({});
+const errorMessage = ref("");
+const form = reactive({ reviewer_name: "", rating: 0, review: "" });
 
-const props = defineProps(["slug"]);
-
-const onCloseModal = () => {
-  const $modalElement = document.querySelector("#modal");
-  if ($modalElement) {
-    const modal = new Modal($modalElement);
-    resetForm();
-    modal.hide();
+watch(() => props.open, async (open) => {
+  if (open) {
+    await nextTick();
+    nameInput.value?.focus();
   }
+});
+
+const resetForm = () => {
+  form.reviewer_name = "";
+  form.rating = 0;
+  form.review = "";
+  errors.value = {};
+  errorMessage.value = "";
+};
+
+const closeModal = () => {
+  if (isLoading.value) return;
+  resetForm();
+  emit("close");
+};
+
+const validate = () => {
+  const nextErrors = {};
+  if (!form.reviewer_name) nextErrors.reviewer_name = ["Name is required."];
+  if (!Number.isInteger(form.rating) || form.rating < 1 || form.rating > 5) nextErrors.rating = ["Choose a whole-star rating from 1 to 5."];
+  if (!form.review) nextErrors.review = ["Review is required."];
+  errors.value = nextErrors;
+  return Object.keys(nextErrors).length === 0;
 };
 
 const handleSubmit = async () => {
-  if (!passedValidation()) return;
+  if (!validate()) return;
 
   isLoading.value = true;
+  errors.value = {};
+  errorMessage.value = "";
 
   try {
-    const response = await reviewStore.submitReview(props.slug, {
-      reviewer_name: name.value,
-      rating: rating.value,
-      review: comment.value,
-    });
-
-    await Swal.fire("Success", response.message, "success");
+    const response = await reviewStore.submitReview(props.slug, { ...form });
+    isLoading.value = false;
     resetForm();
     emit("success");
+    await Swal.fire("Review submitted", response.message, "success");
   } catch (error) {
-    const errors = error.response?.data?.errors || {};
-    name_error.value = errors.reviewer_name?.[0] || "";
-    rating_error.value = errors.rating?.[0] || "";
-    comment_error.value = errors.review?.[0] || "";
-    await Swal.fire("Error", error.response?.data?.message || "Unable to submit the review.", "error");
+    errors.value = error.response?.data?.errors || {};
+    errorMessage.value = error.response?.data?.message || "Unable to submit the review.";
   } finally {
     isLoading.value = false;
   }
 };
 
-const resetForm = () => {
-  name.value = "";
-  rating.value = 0;
-  comment.value = "";
-  name_error.value = "";
-  rating_error.value = "";
-  comment_error.value = "";
-};
-
-const passedValidation = () => {
-  let is_valid = true;
-  if (!name.value) {
-    name_error.value = "Name is required";
-    is_valid = false;
-  } else {
-    name_error.value = "";
-  }
-  if (!rating.value || rating.value === 0) {
-    rating_error.value = "Rating is required";
-    is_valid = false;
-  } else {
-    rating_error.value = "";
-  }
-
-  if (!comment.value) {
-    comment_error.value = "Comment is required";
-    is_valid = false;
-  } else {
-    comment_error.value = "";
-  }
-  return is_valid;
-};
+const fieldError = (field) => errors.value[field]?.[0] || "";
 </script>

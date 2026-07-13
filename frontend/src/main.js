@@ -3,8 +3,8 @@ import { pinia } from "./stores";
 
 import "./assets/main.css";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { BiFacebook, BiInstagram, BiYoutube, BiTiktok, BiHeart, BiHeartFill, OiPlus } from "oh-vue-icons/icons";
-addIcons(BiFacebook, BiInstagram, BiYoutube, BiTiktok, BiHeart, BiHeartFill, OiPlus);
+import { BiFacebook, BiInstagram, BiYoutube, BiTiktok, OiPlus } from "oh-vue-icons/icons";
+addIcons(BiFacebook, BiInstagram, BiYoutube, BiTiktok, OiPlus);
 
 import App from "./App.vue";
 import router from "./router";

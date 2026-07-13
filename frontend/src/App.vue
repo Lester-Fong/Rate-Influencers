@@ -1,24 +1,17 @@
 <template>
-  <FrontLayout v-if="layout == 'front'" />
-  <AuthLayout v-if="layout == 'auth'" />
-  <PortalLayout v-if="layout == 'portal'" />
+  <FrontLayout v-if="layout === 'front'" />
+  <AuthLayout v-else-if="layout === 'auth'" />
+  <PortalLayout v-else-if="layout === 'portal'" />
 </template>
 
 <script setup>
 import FrontLayout from "@/layout/Front.vue";
 import AuthLayout from "@/layout/Auth.vue";
 import PortalLayout from "@/layout/Portal.vue";
-import { watch, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
-const router = useRouter();
-const layout = ref("");
-
-watch(
-  () => router.currentRoute.value,
-  (to) => {
-    layout.value = to.meta.layout;
-  }
-);
+const route = useRoute();
+const layout = computed(() => route.meta.layout);
 </script>
 
