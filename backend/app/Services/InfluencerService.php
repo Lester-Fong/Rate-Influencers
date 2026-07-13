@@ -7,6 +7,34 @@ use Illuminate\Database\Eloquent\Collection;
 
 class InfluencerService
 {
+    public function listAdminInfluencers(): Collection
+    {
+        return Influencer::query()
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function createInfluencer(array $data): Influencer
+    {
+        return Influencer::query()->create([
+            ...$data,
+            'rating' => 0,
+            'review_count' => 0,
+        ]);
+    }
+
+    public function updateInfluencer(Influencer $influencer, array $data): Influencer
+    {
+        $influencer->update($data);
+
+        return $influencer->refresh();
+    }
+
+    public function deleteInfluencer(Influencer $influencer): void
+    {
+        $influencer->delete();
+    }
+
     public function listPublicInfluencers(): Collection
     {
         return Influencer::query()
