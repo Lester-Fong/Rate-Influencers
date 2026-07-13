@@ -3,7 +3,7 @@ import { pinia } from "../stores";
 import { useAuthStore } from "../stores/auth";
 const HomeView = () => import("../views/HomeView.vue");
 const aboutView = () => import("../views/AboutView.vue");
-const InfluencerView = () => import("../views/InfluencerView.vue");
+const InfluencerDetailView = () => import("../views/InfluencerDetailView.vue");
 const LoginView = () => import("../views/auth/LoginView.vue");
 
 const DashboardView = () => import("../views/portal/DashboardView.vue");
@@ -69,7 +69,7 @@ const router = createRouter({
         {
           path: "/:influencerSlug",
           name: "influencer",
-          component: InfluencerView,
+          component: InfluencerDetailView,
         },
         {
           path: "/about",

@@ -2,32 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexInfluencerRequest;
 use App\Services\InfluencerService;
 use App\Http\Resources\InfluencerResource;
 use App\Http\Resources\InfluencerResourceCollection;
 
 class InfluencerController extends Controller
 {
-    public function index(InfluencerService $influencerService)
+    public function index(
+        IndexInfluencerRequest $request,
+        InfluencerService $influencerService
+    ): InfluencerResourceCollection
     {
         return new InfluencerResourceCollection(
-            $influencerService->listPublicInfluencers()
+            $influencerService->listPublicInfluencers(
+                $request->validated('search')
+            )
         );
     }
 
     public function show(InfluencerService $influencerService, string $slug)
     {
-        $result = $influencerService->showInfluencerBySlug($slug);
+        $influencer = $influencerService->showInfluencerBySlug($slug);
 
-        if (! $result) {
+        if (! $influencer) {
             return response()->json([
                 'message' => 'Influencer not found.',
             ], 404);
         }
 
-        return response()->json([
-            'influencer' => new InfluencerResource($result['influencer']),
-            'other_influencers' => new InfluencerResourceCollection($result['other_influencers']),
-        ]);
+        return new InfluencerResource($influencer);
     }
 }

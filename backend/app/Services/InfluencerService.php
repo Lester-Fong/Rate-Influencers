@@ -35,31 +35,24 @@ class InfluencerService
         $influencer->delete();
     }
 
-    public function listPublicInfluencers(): Collection
+    public function listPublicInfluencers(?string $search = null): Collection
     {
         return Influencer::query()
-            ->with(['reviews' => fn ($query) => $query->approved()->latest()])
+            ->when($search, function ($query, string $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('name')
             ->get();
     }
 
-    public function showInfluencerBySlug(string $slug): ?array
+    public function showInfluencerBySlug(string $slug): ?Influencer
     {
-        $influencer = Influencer::query()
+        return Influencer::query()
             ->where('slug', $slug)
             ->with(['reviews' => fn ($query) => $query->approved()->latest()])
             ->first();
-
-        if (! $influencer) {
-            return null;
-        }
-
-        return [
-            'influencer' => $influencer,
-            'other_influencers' => Influencer::query()
-                ->where('slug', '!=', $slug)
-                ->inRandomOrder()
-                ->take(5)
-                ->get(),
-        ];
     }
 }

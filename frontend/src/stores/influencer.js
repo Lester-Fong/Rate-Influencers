@@ -4,26 +4,17 @@ axios.defaults.baseURL = "/api"; // This ensures Axios respects the proxy
 
 export const useInfluencerStore = defineStore("influencerStore", {
   actions: {
-    async getInfluencers() {
-      try {
-        const response = await axios.get("/");
-        if (typeof response.data === "object") {
-          return response.data.data;
-        } else {
-          return { error: true };
-        }
-      } catch (error) {
-        return { error: true };
-      }
+    async getInfluencers(search = "") {
+      const response = await axios.get("/v1/influencers", {
+        params: search ? { search } : {},
+      });
+
+      return response.data.data;
     },
 
     async showInfluencer(slug) {
-      try {
-        const response = await axios.get(`/${slug}`);
-        return response.data;
-      } catch (error) {
-        return { error: true };
-      }
+      const response = await axios.get(`/v1/influencers/${slug}`);
+      return response.data.data;
     },
 
     async submitReview(data) {

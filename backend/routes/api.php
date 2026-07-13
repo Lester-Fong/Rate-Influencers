@@ -22,9 +22,14 @@ Route::prefix('v1/admin')
             ->except('show');
     });
 
-// Dislay all Influencers
-Route::get("/", [InfluencerController::class, "index"]);
-// Show Influencer by slug
-Route::get("/{slug}", [InfluencerController::class, "show"]);
+Route::prefix('v1')
+    ->name('public.')
+    ->group(function () {
+        Route::get('/influencers', [InfluencerController::class, 'index'])
+            ->name('influencers.index');
+        Route::get('/influencers/{slug}', [InfluencerController::class, 'show'])
+            ->name('influencers.show');
+    });
+
 // Store Review by Slug
 Route::post("/{slug}", [ReviewController::class, "store"]);

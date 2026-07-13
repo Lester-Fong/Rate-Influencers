@@ -64,10 +64,10 @@ class DomainAlignmentTest extends TestCase
             ],
         ]);
 
-        $this->getJson('/api/example-creator')
+        $this->getJson('/api/v1/influencers/example-creator')
             ->assertOk()
-            ->assertJsonCount(1, 'influencer.reviews')
-            ->assertJsonPath('influencer.reviews.0.reviewer_name', 'Approved Reviewer')
+            ->assertJsonCount(1, 'data.reviews')
+            ->assertJsonPath('data.reviews.0.reviewer_name', 'Approved Reviewer')
             ->assertJsonMissing(['reviewer_name' => 'Pending Reviewer']);
     }
 
