@@ -134,7 +134,7 @@ a {
 .ir-card-avatar {
   width: 7.5rem;
   height: 7.5rem;
-  margin-top: -4.75rem;
+  margin-top: -2rem;
 }
 
 .ir-profile-avatar {
@@ -154,7 +154,9 @@ a {
   background: var(--ir-green);
   color: white;
   font-weight: 700;
-  transition: background-color 150ms ease, transform 150ms ease;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
 }
 
 .ir-button-primary:hover {
