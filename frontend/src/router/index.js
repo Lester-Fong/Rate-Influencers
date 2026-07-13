@@ -7,7 +7,7 @@ const InfluencerView = () => import("../views/InfluencerView.vue");
 const LoginView = () => import("../views/auth/LoginView.vue");
 
 const DashboardView = () => import("../views/portal/DashboardView.vue");
-const InfluencerPortalView = () => import("../views/portal/InfluencerView.vue");
+const AdminInfluencersView = () => import("../views/portal/AdminInfluencersView.vue");
 const ReviewsPortalView = () => import("../views/portal/ReviewsView.vue");
 
 const router = createRouter({
@@ -43,8 +43,8 @@ const router = createRouter({
         },
         {
           path: "influencer",
-          name: "influencerPortal",
-          component: InfluencerPortalView,
+          name: "adminInfluencers",
+          component: AdminInfluencersView,
         },
         {
           path: "reviews",

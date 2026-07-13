@@ -5,7 +5,7 @@
         <Sidebar />
       </div>
     </aside>
-    <main class="bg-gray-100">
+    <main class="min-h-screen flex-1 bg-gray-100">
       <div class="pt-20 px-7">
         <router-view></router-view>
       </div>

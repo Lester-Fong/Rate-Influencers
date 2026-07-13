@@ -9,7 +9,7 @@
         <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
       </li>
       <li class="pb-3 cursor-pointer text-gray-500 font-medium hover:text-gray-300">
-        <router-link :to="{ name: 'influencerPortal' }">Influencers</router-link>
+        <router-link :to="{ name: 'adminInfluencers' }">Influencers</router-link>
       </li>
       <li class="pb-3 cursor-pointer text-gray-500 font-medium hover:text-gray-300">
         <router-link :to="{ name: 'reviewsPortal' }">Reviews</router-link>

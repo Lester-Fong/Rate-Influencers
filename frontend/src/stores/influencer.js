@@ -30,5 +30,20 @@ export const useInfluencerStore = defineStore("influencerStore", {
       const response = await axios.post(`/${data.slug}`, data);
       return response.data;
     },
+    async getAdminInfluencers() {
+      const response = await axios.get("/v1/admin/influencers");
+      return response.data.data;
+    },
+    async createInfluencer(data) {
+      const response = await axios.post("/v1/admin/influencers", data);
+      return response.data.data;
+    },
+    async updateInfluencer(id, data) {
+      const response = await axios.patch(`/v1/admin/influencers/${id}`, data);
+      return response.data.data;
+    },
+    async deleteInfluencer(id) {
+      await axios.delete(`/v1/admin/influencers/${id}`);
+    },
   },
 });
