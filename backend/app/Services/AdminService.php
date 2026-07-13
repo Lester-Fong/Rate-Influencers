@@ -3,18 +3,21 @@
 namespace App\Services;
 
 use App\Models\Administrator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminService
 {
-    public function loginUser($data) {
+    public function loginUser(array $data): ?Administrator
+    {
 
         $admin = Administrator::where("email", $data["email"])->first();
         if (!isset($admin) || !Hash::check($data["password"], $admin->password)) {
-            return response()->json(["error" => true, "message" => "Invalid credentials"], 401);
+            return null;
         }
 
-        $token = $admin->createToken($admin->id . "admin")->plainTextToken;
-        return ["token" => $token, "admin" => $admin];
+        Auth::guard('web')->login($admin);
+
+        return $admin;
     }
 }

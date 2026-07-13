@@ -25,7 +25,6 @@
 
 
 <script setup>
-import cryptojs from "crypto-js";
 import { getCookie } from "@/utils/helper";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
@@ -86,8 +85,7 @@ const handleSubmit = async () => {
         if (!response) return;
 
         handleClearFields();
-        const token = cryptojs.AES.encrypt(response.token, import.meta.env.VITE_SECRET_PASSPHRASE); // Encrypted token
-        sessionStorage.setItem("api-token", token);
+        sessionStorage.setItem("api-token", "authenticated");
         router.push({ name: "dashboard" });
       }
     }

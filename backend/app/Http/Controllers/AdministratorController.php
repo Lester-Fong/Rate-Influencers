@@ -3,25 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequest;
-use App\Models\Administrator;
 use App\Services\AdminService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class AdministratorController extends Controller
 {
-    public function login(AdminRequest $request, AdminService $service) {
+    public function login(AdminRequest $request, AdminService $service)
+    {
         $data = $request->validated();
 
         try {
-            $response = $service->loginUser($data);
+            $admin = $service->loginUser($data);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(["error" => true, "message" => "An error occurred"], 500);
         }
-        
-        return response()->json($response);
+
+        if (! $admin) {
+            return response()->json([
+                'message' => 'Invalid credentials.',
+                'errors' => [
+                    'email' => ['The supplied credentials are invalid.'],
+                    'password' => ['The supplied credentials are invalid.'],
+                ],
+            ], 422);
+        }
+
+        $request->session()->regenerate();
+
+        return response()->json(['admin' => $admin]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->noContent();
     }
 }

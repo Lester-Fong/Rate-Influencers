@@ -6,7 +6,7 @@ export const useInfluencerStore = defineStore("influencerStore", {
   actions: {
     async getInfluencers() {
       try {
-        const response = await axios.get("/api/");
+        const response = await axios.get("/");
         if (typeof response.data === "object") {
           return response.data.data;
         } else {
@@ -19,7 +19,7 @@ export const useInfluencerStore = defineStore("influencerStore", {
 
     async showInfluencer(slug) {
       try {
-        const response = await axios.get(`/api/${slug}`);
+        const response = await axios.get(`/${slug}`);
         return response.data;
       } catch (error) {
         return { error: true };
@@ -27,7 +27,7 @@ export const useInfluencerStore = defineStore("influencerStore", {
     },
 
     async addInfluencerComment(data) {
-      const response = await axios.post(`/api/${data.slug}`, data);
+      const response = await axios.post(`/${data.slug}`, data);
       return response.data;
     },
   },

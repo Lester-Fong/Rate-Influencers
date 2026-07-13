@@ -1,8 +1,8 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { checkTokenAndSetAxios } from "@/utils/helper";
-checkTokenAndSetAxios();
-axios.defaults.baseURL = "/api"; // This ensures Axios respects the proxy
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+axios.defaults.baseURL = "/api";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
@@ -10,25 +10,35 @@ export const useAuthStore = defineStore("authStore", {
   }),
   actions: {
     async getCSRFToken() {
-      let response = await axios.get("/sanctum/csrf-cookie");
-      if (response.status === 204) {
-        return true;
+      try {
+        const response = await axios.get("/sanctum/csrf-cookie", {
+          baseURL: "",
+        });
+        return response.status === 204;
+      } catch (error) {
+        console.error("CSRF Token initialization failed:", error);
+        return false;
       }
-      return false;
     },
     async login(data) {
       try {
-        const response = await axios.post("/api/login", data);
+        const response = await axios.post("/login", data);
         this.admin_record = response.data.admin;
         return response.data;
       } catch (error) {
-        Object.assign(error.response.data.errors, { error: true });
-        return error.response.data.errors;
+        const errors = error.response?.data?.errors || { general: ["Server error"] };
+        Object.assign(errors, { error: true });
+        return errors;
       }
     },
     async logout() {
-      await axios.post("/api/logout");
-      this.admin_record = null;
+      try {
+        await axios.post("/logout");
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        this.admin_record = null;
+      }
     },
   },
 });
