@@ -19,6 +19,11 @@ class ReviewResource extends JsonResource
             'review' => $this->review,
             'status' => $this->status,
             'created_at' => $this->created_at,
+            'influencer' => $this->whenLoaded('influencer', fn () => [
+                'id' => $this->influencer->id,
+                'name' => $this->influencer->name,
+                'slug' => $this->influencer->slug,
+            ]),
         ];
     }
 }

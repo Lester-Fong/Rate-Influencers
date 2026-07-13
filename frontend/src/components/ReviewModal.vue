@@ -10,6 +10,7 @@
             <div class="w-full">
               <label for="name" class="ir-text block mb-2 text-xl font-medium">Name</label>
               <input
+                id="name"
                 type="text"
                 class="ir-text block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 v-model="name"
@@ -17,7 +18,7 @@
               <span class="text-red-500 ir-text text-sm">{{ name_error }}</span>
             </div>
             <div class="w-full">
-              <label for="name" class="ir-text block mb-2 text-xl font-medium">Rating</label>
+              <span class="ir-text block mb-2 text-xl font-medium">Rating</span>
               <star-rating :star-size="33" :increment="1" active-color="#a7d708" inactive-color="transparent" border-color="#F4978E" :border-width="3" :show-rating="false" :padding="10" v-model:rating="rating"> </star-rating>
               <span class="text-red-500 ir-text text-sm">{{ rating_error }}</span>
             </div>
@@ -40,7 +41,9 @@
             >
               Cancel
             </button>
-            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Submit</button>
+            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit" :disabled="isLoading">
+              {{ isLoading ? "Submitting…" : "Submit" }}
+            </button>
           </div>
         </form>
       </div>
@@ -52,7 +55,7 @@
 import Swal from "sweetalert2";
 import { Modal } from "flowbite";
 import { ref } from "vue";
-import { useInfluencerStore } from "../stores/influencer";
+import { useReviewStore } from "@/stores/review";
 
 const isLoading = ref(false);
 const name = ref("");
@@ -61,7 +64,7 @@ const rating = ref(0);
 const rating_error = ref("");
 const comment = ref("");
 const comment_error = ref("");
-const influencerStore = useInfluencerStore();
+const reviewStore = useReviewStore();
 const emit = defineEmits(["success"]);
 
 const props = defineProps(["slug"]);
@@ -76,23 +79,28 @@ const onCloseModal = () => {
 };
 
 const handleSubmit = async () => {
-  if (passedValidation()) {
-    isLoading.value = true;
-    const response = await influencerStore.submitReview({
+  if (!passedValidation()) return;
+
+  isLoading.value = true;
+
+  try {
+    const response = await reviewStore.submitReview(props.slug, {
       reviewer_name: name.value,
       rating: rating.value,
       review: comment.value,
-      slug: props.slug,
     });
 
-    if (response.error) {
-      Swal.fire("Error", response.message, "error");
-    } else {
-      Swal.fire("Success", response.message, "success");
-    }
-    isLoading.value = false;
+    await Swal.fire("Success", response.message, "success");
     resetForm();
     emit("success");
+  } catch (error) {
+    const errors = error.response?.data?.errors || {};
+    name_error.value = errors.reviewer_name?.[0] || "";
+    rating_error.value = errors.rating?.[0] || "";
+    comment_error.value = errors.review?.[0] || "";
+    await Swal.fire("Error", error.response?.data?.message || "Unable to submit the review.", "error");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -100,6 +108,9 @@ const resetForm = () => {
   name.value = "";
   rating.value = 0;
   comment.value = "";
+  name_error.value = "";
+  rating_error.value = "";
+  comment_error.value = "";
 };
 
 const passedValidation = () => {

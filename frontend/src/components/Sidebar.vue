@@ -12,7 +12,7 @@
         <router-link :to="{ name: 'adminInfluencers' }">Influencers</router-link>
       </li>
       <li class="pb-3 cursor-pointer text-gray-500 font-medium hover:text-gray-300">
-        <router-link :to="{ name: 'reviewsPortal' }">Reviews</router-link>
+        <router-link :to="{ name: 'adminReviews' }">Reviews</router-link>
       </li>
       <li class="pt-6">
         <button type="button" class="text-gray-500 font-medium hover:text-gray-300 disabled:opacity-60" :disabled="authStore.isLoading" @click="handleLogout">

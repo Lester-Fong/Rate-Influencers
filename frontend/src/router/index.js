@@ -8,7 +8,7 @@ const LoginView = () => import("../views/auth/LoginView.vue");
 
 const DashboardView = () => import("../views/portal/DashboardView.vue");
 const AdminInfluencersView = () => import("../views/portal/AdminInfluencersView.vue");
-const ReviewsPortalView = () => import("../views/portal/ReviewsView.vue");
+const AdminReviewsView = () => import("../views/portal/AdminReviewsView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,8 +48,8 @@ const router = createRouter({
         },
         {
           path: "reviews",
-          name: "reviewsPortal",
-          component: ReviewsPortalView,
+          name: "adminReviews",
+          component: AdminReviewsView,
         },
       ],
     },

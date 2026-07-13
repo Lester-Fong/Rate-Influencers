@@ -78,7 +78,7 @@ class DomainAlignmentTest extends TestCase
             'slug' => 'example-creator',
         ]);
 
-        $this->postJson('/api/example-creator', [
+        $this->postJson('/api/v1/influencers/example-creator/reviews', [
             'reviewer_name' => 'New Reviewer',
             'rating' => 4,
             'review' => 'A pending review.',

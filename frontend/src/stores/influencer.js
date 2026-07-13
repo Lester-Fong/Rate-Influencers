@@ -17,10 +17,6 @@ export const useInfluencerStore = defineStore("influencerStore", {
       return response.data.data;
     },
 
-    async submitReview(data) {
-      const response = await axios.post(`/${data.slug}`, data);
-      return response.data;
-    },
     async getAdminInfluencers() {
       const response = await axios.get("/v1/admin/influencers");
       return response.data.data;
