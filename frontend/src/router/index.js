@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { pinia } from "../stores";
+import { useAuthStore } from "../stores/auth";
 const HomeView = () => import("../views/HomeView.vue");
 const aboutView = () => import("../views/AboutView.vue");
 const InfluencerView = () => import("../views/InfluencerView.vue");
@@ -6,7 +8,7 @@ const LoginView = () => import("../views/auth/LoginView.vue");
 
 const DashboardView = () => import("../views/portal/DashboardView.vue");
 const InfluencerPortalView = () => import("../views/portal/InfluencerView.vue");
-const CommentsPortalView = () => import("../views/portal/CommentsView.vue");
+const ReviewsPortalView = () => import("../views/portal/ReviewsView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,9 +47,9 @@ const router = createRouter({
           component: InfluencerPortalView,
         },
         {
-          path: "comments",
-          name: "commentsPortal",
-          component: CommentsPortalView,
+          path: "reviews",
+          name: "reviewsPortal",
+          component: ReviewsPortalView,
         },
       ],
     },
@@ -79,22 +81,22 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  const token = sessionStorage.getItem("api-token");
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    if (!token) {
-      next({
-        name: "login",
-      });
-    }
-  } else {
-    if (token) {
-      sessionStorage.removeItem("api-token");
-    }
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore(pinia);
+
+  if (!authStore.initialized) {
+    await authStore.fetchCurrentAdmin();
   }
-  next(); // make sure to always call next()!
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return { name: "login", query: { redirect: to.fullPath } };
+  }
+
+  if (to.name === "login" && authStore.isAuthenticated) {
+    return { name: "dashboard" };
+  }
+
+  return true;
 });
 
 export default router;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequest;
+use App\Http\Resources\AdministratorResource;
 use App\Services\AdminService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,12 @@ class AdministratorController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json(['admin' => $admin]);
+        return new AdministratorResource($admin);
+    }
+
+    public function me(Request $request): AdministratorResource
+    {
+        return new AdministratorResource($request->user());
     }
 
     public function logout(Request $request)

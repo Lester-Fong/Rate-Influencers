@@ -105,10 +105,10 @@ const onCloseModal = () => {
 const handleSubmit = async () => {
   if (passedValidation()) {
     isLoading.value = true;
-    const response = await influencerStore.addInfluencerComment({
-      name: name.value,
-      influencer_rating: rating.value,
-      comment: comment.value,
+    const response = await influencerStore.submitReview({
+      reviewer_name: name.value,
+      rating: rating.value,
+      review: comment.value,
       slug: props.slug,
     });
 

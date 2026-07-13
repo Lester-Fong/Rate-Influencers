@@ -18,7 +18,7 @@
             </div>
             <div class="w-full">
               <label for="name" class="ir-text block mb-2 text-xl font-medium">Rating</label>
-              <star-rating :star-size="33" :increment="0.5" active-color="#a7d708" inactive-color="transparent" border-color="#F4978E" :border-width="3" :show-rating="false" :padding="10" v-model:rating="rating"> </star-rating>
+              <star-rating :star-size="33" :increment="1" active-color="#a7d708" inactive-color="transparent" border-color="#F4978E" :border-width="3" :show-rating="false" :padding="10" v-model:rating="rating"> </star-rating>
               <span class="text-red-500 ir-text text-sm">{{ rating_error }}</span>
             </div>
           </div>
@@ -78,10 +78,10 @@ const onCloseModal = () => {
 const handleSubmit = async () => {
   if (passedValidation()) {
     isLoading.value = true;
-    const response = await influencerStore.addInfluencerComment({
-      name: name.value,
-      influencer_rating: rating.value,
-      comment: comment.value,
+    const response = await influencerStore.submitReview({
+      reviewer_name: name.value,
+      rating: rating.value,
+      review: comment.value,
       slug: props.slug,
     });
 

@@ -41,7 +41,7 @@
             <span class="cursor-pointer opacity-90 hover:opacity-100">Top</span>
           </h1>
         </div>
-        <Comment v-for="(data, i) in comments" :data="data" />
+        <Review v-for="review in reviews" :key="review.id" :review="review" />
       </div>
       <div class="ir-container basis-3/12 pt-5 pb-10 px-8 bg-neutral-800 drop-shadow-2xl drop-shadow-neutral-200">
         <h1 class="ir-text text-2xl ir-text-main text-center">Other Influencers</h1>
@@ -58,11 +58,11 @@ import { useRoute, useRouter } from "vue-router";
 import { Modal } from "flowbite";
 import IconLink from "@/components/IconLink.vue";
 import ReviewModal from "@/components/ReviewModal.vue";
-import Comment from "@/components/Comment.vue";
+import Review from "@/components/Review.vue";
 import InfluencerCard from "@/components/InfluencerCard.vue";
 import { useInfluencerStore } from "../stores/influencer";
 
-const comments = ref([]);
+const reviews = ref([]);
 const influencer = ref();
 const otherInfluencers = ref([]);
 const route = useRoute();
@@ -87,7 +87,7 @@ const onPopulateInfluencerData = async (slug) => {
     router.push({ name: "home" });
   } else {
     influencer.value = response.influencer;
-    comments.value = influencer.value.comments;
+    reviews.value = influencer.value.reviews;
     otherInfluencers.value = response.other_influencers;
   }
 };
@@ -117,6 +117,6 @@ const onSuccess = () => {
 const handleResetData = () => {
   influencer.value = {};
   otherInfluencers.value = [];
-  comments.value = [];
+  reviews.value = [];
 };
 </script>

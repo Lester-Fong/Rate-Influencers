@@ -2,11 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class InfluencerResource extends JsonResource
 {
@@ -21,7 +19,9 @@ class InfluencerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'bio' => $this->bio,
             'rating' => $this->rating,
+            'review_count' => $this->review_count,
             'profile_picture' => $this->profile_picture,
             'facebook_link' => $this->facebook_link,
             'youtube_link' => $this->youtube_link,
@@ -29,7 +29,7 @@ class InfluencerResource extends JsonResource
             'instagram_link' => $this->instagram_link,
             'created_at' => Carbon::parse($this->created_at)->format('M j, Y'),
             'updated_at' => Carbon::parse($this->updated_at)->format('M j, Y'),
-            'comments' => new CommentResourceCollection($this->comments),
+            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
         ];
     }
 }

@@ -1,20 +1,21 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InfluencerController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AdministratorController;
 
-// Login Admin
+Route::prefix('v1/auth')->group(function () {
+    Route::post('/login', [AdministratorController::class, 'login']);
 
-Route::post("/login", [AdministratorController::class, "login"]);
-
-Route::middleware("auth:sanctum")->group(function() {
-    Route::post("/logout", [AdministratorController::class, "logout"]);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/me', [AdministratorController::class, 'me']);
+        Route::post('/logout', [AdministratorController::class, 'logout']);
+    });
 });
 
 // Dislay all Influencers
 Route::get("/", [InfluencerController::class, "index"]);
 // Show Influencer by slug
 Route::get("/{slug}", [InfluencerController::class, "show"]);
-// Store Comment by Slug
-Route::post("/{slug}", [CommentController::class, "store"]);
+// Store Review by Slug
+Route::post("/{slug}", [ReviewController::class, "store"]);

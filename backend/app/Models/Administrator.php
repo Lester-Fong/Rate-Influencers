@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
 
 class Administrator extends Authenticatable
 {
@@ -15,9 +14,11 @@ class Administrator extends Authenticatable
     protected $table = "administrators";
 
     protected $fillable = [
-        "name",
+        "fullname",
         "email",
-        "password"
+        "password",
+        "profile_picture",
+        "mobile",
     ];
 
     protected $hidden = [
@@ -25,5 +26,10 @@ class Administrator extends Authenticatable
         "remember_token"
     ];
 
-
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 }

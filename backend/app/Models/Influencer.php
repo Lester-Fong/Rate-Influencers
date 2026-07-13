@@ -12,7 +12,8 @@ class Influencer extends Model
     protected $table = "influencers";
     protected $guarded = [];
 
-    public function comments() {
-        return $this->hasMany(Comment::class);
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }

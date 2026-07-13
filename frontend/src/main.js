@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { createPinia } from "pinia";
+import { pinia } from "./stores";
 
 import "./assets/main.css";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
@@ -12,7 +12,7 @@ import StarRating from "vue-star-rating";
 
 const app = createApp(App);
 
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 app.component("star-rating", StarRating);
 app.component("v-icon", OhVueIcon);

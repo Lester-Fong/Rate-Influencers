@@ -26,7 +26,7 @@ export const useInfluencerStore = defineStore("influencerStore", {
       }
     },
 
-    async addInfluencerComment(data) {
+    async submitReview(data) {
       const response = await axios.post(`/${data.slug}`, data);
       return response.data;
     },
