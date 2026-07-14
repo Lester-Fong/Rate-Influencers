@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             $administrator->update(['fullname' => $admin['fullname']]);
         }
 
+        $this->call(InfluencerSeeder::class);
+
         $influencers = collect([
             [
                 'name' => 'Addison Randall',

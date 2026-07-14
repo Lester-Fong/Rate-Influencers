@@ -16,7 +16,7 @@ class DatabaseSeederTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertDatabaseCount('administrators', 1);
-        $this->assertDatabaseCount('influencers', 3);
+        $this->assertDatabaseCount('influencers', 27);
         $this->assertDatabaseCount('reviews', 5);
         $this->assertDatabaseHas('administrators', [
             'email' => 'arthur.white@example.net',
@@ -31,6 +31,16 @@ class DatabaseSeederTest extends TestCase
             'slug' => 'hiram-sandoval',
             'rating' => 0,
             'review_count' => 0,
+        ]);
+        $this->assertDatabaseHas('influencers', [
+            'slug' => 'bretman-rock',
+            'name' => 'Bretman Rock',
+            'instagram_link' => 'https://www.instagram.com/bretmanrock/',
+        ]);
+        $this->assertDatabaseHas('influencers', [
+            'slug' => 'gordon-ramsay',
+            'name' => 'Gordon Ramsay',
+            'youtube_link' => 'https://www.youtube.com/@gordonramsay',
         ]);
     }
 }
