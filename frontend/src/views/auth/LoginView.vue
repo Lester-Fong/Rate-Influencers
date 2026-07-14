@@ -4,21 +4,20 @@
     <h1 class="text-3xl font-bold text-white">Welcome back</h1>
     <p class="mt-2 text-sm text-slate-300">Sign in to manage influencers and moderate reviews.</p>
     <div class="pt-7">
-        <div class="mb-4">
-          <label class="mb-2 block text-sm font-bold text-rose-100" for="email">Email</label>
-          <input id="email" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" v-model.trim="email" type="email" autocomplete="email" placeholder="arthur.white@example.net" />
-          <p class="mt-1 text-xs text-red-300">{{ email_error }}</p>
-        </div>
-        <div class="mb-6">
-          <label class="mb-2 block text-sm font-bold text-rose-100" for="password">Password</label>
-          <input id="password" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" v-model="password" type="password" autocomplete="current-password" placeholder="Enter your password" />
-          <p class="mt-1 text-xs text-red-300">{{ password_error }}</p>
-        </div>
-        <p v-if="general_error" class="mb-4 rounded-lg bg-red-950/50 p-3 text-sm text-red-200" role="alert">{{ general_error }}</p>
-        <div>
-          <button class="ir-button-primary w-full px-5 py-3 disabled:opacity-60" type="submit" :disabled="authStore.isLoading">{{ authStore.isLoading ? "Signing in..." : "Sign in" }}</button>
-        </div>
-        <p class="mt-5 text-xs text-slate-400">Local seed: arthur.white@example.net / Test_123</p>
+      <div class="mb-4">
+        <label class="mb-2 block text-sm font-bold text-rose-100" for="email">Email</label>
+        <input id="email" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" v-model.trim="email" type="email" autocomplete="email" placeholder="email@example.net" />
+        <p class="mt-1 text-xs text-red-300">{{ email_error }}</p>
+      </div>
+      <div class="mb-6">
+        <label class="mb-2 block text-sm font-bold text-rose-100" for="password">Password</label>
+        <input id="password" class="w-full rounded-xl border border-white/20 bg-white px-4 py-3 text-gray-900" v-model="password" type="password" autocomplete="current-password" placeholder="Enter your password" />
+        <p class="mt-1 text-xs text-red-300">{{ password_error }}</p>
+      </div>
+      <p v-if="general_error" class="mb-4 rounded-lg bg-red-950/50 p-3 text-sm text-red-200" role="alert">{{ general_error }}</p>
+      <div>
+        <button class="ir-button-primary w-full px-5 py-3 disabled:opacity-60" type="submit" :disabled="authStore.isLoading">{{ authStore.isLoading ? "Signing in..." : "Sign in" }}</button>
+      </div>
     </div>
   </form>
 </template>
