@@ -54,6 +54,14 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+
+    'seed_admin' => [
+        'fullname' => env('ADMIN_FULLNAME', 'Arthur White'),
+        'email' => env('ADMIN_EMAIL', 'arthur.white@example.net'),
+        'password' => env('ADMIN_PASSWORD', 'Test_123'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

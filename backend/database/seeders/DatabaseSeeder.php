@@ -12,16 +12,19 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $admin = config('app.seed_admin');
+        $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
+
         $administrator = Administrator::query()->firstOrCreate(
-            ['email' => 'arthur.white@example.net'],
+            ['email' => $admin['email']],
             [
-                'fullname' => 'Arthur White',
-                'password' => Hash::make('Test_123'),
+                'fullname' => $admin['fullname'],
+                'password' => Hash::make($admin['password']),
             ]
         );
 
         if (! $administrator->fullname) {
-            $administrator->update(['fullname' => 'Arthur White']);
+            $administrator->update(['fullname' => $admin['fullname']]);
         }
 
         $influencers = collect([
@@ -29,7 +32,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Addison Randall',
                 'slug' => 'addison-randall',
                 'bio' => 'Lifestyle creator sharing practical routines, creative projects, and candid behind-the-scenes videos.',
-                'profile_picture' => 'http://localhost:3000/assets/avatar-addison.svg',
+                'profile_picture' => "{$frontendUrl}/assets/avatar-addison.svg",
                 'instagram_link' => 'https://www.instagram.com/',
                 'youtube_link' => 'https://www.youtube.com/',
                 'tiktok_link' => 'https://www.tiktok.com/',
@@ -39,7 +42,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Hiram Sandoval',
                 'slug' => 'hiram-sandoval',
                 'bio' => 'Tech and productivity creator focused on approachable tutorials and honest gear discussions.',
-                'profile_picture' => 'http://localhost:3000/assets/avatar-hiram.svg',
+                'profile_picture' => "{$frontendUrl}/assets/avatar-hiram.svg",
                 'instagram_link' => 'https://www.instagram.com/',
                 'youtube_link' => 'https://www.youtube.com/',
                 'tiktok_link' => 'https://www.tiktok.com/',
@@ -49,7 +52,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Maya Chen',
                 'slug' => 'maya-chen',
                 'bio' => 'Food storyteller exploring neighborhood restaurants, home recipes, and the people behind each dish.',
-                'profile_picture' => 'http://localhost:3000/assets/avatar-maya.svg',
+                'profile_picture' => "{$frontendUrl}/assets/avatar-maya.svg",
                 'instagram_link' => 'https://www.instagram.com/',
                 'youtube_link' => 'https://www.youtube.com/',
                 'tiktok_link' => null,
