@@ -1,9 +1,5 @@
-import axios from "axios";
 import { defineStore } from "pinia";
-
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-axios.defaults.baseURL = "/api";
+import api, { sanctumCsrfUrl } from "@/lib/http";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
@@ -17,7 +13,7 @@ export const useAuthStore = defineStore("authStore", {
   },
   actions: {
     async getCSRFToken() {
-      const response = await axios.get("/sanctum/csrf-cookie", {
+      const response = await api.get(sanctumCsrfUrl, {
         baseURL: "",
       });
 
@@ -28,7 +24,7 @@ export const useAuthStore = defineStore("authStore", {
       this.errorMessage = "";
 
       try {
-        const response = await axios.get("/v1/auth/me");
+        const response = await api.get("/v1/auth/me");
         this.admin = response.data.data;
         return true;
       } catch (error) {
@@ -51,7 +47,7 @@ export const useAuthStore = defineStore("authStore", {
       try {
         await this.getCSRFToken();
 
-        const response = await axios.post("/v1/auth/login", data);
+        const response = await api.post("/v1/auth/login", data);
         this.admin = response.data.data;
         this.initialized = true;
 
@@ -75,7 +71,7 @@ export const useAuthStore = defineStore("authStore", {
       this.errorMessage = "";
 
       try {
-        await axios.post("/v1/auth/logout");
+        await api.post("/v1/auth/logout");
         this.admin = null;
         this.initialized = true;
         return true;

@@ -1,11 +1,10 @@
-import axios from "axios";
 import { defineStore } from "pinia";
-axios.defaults.baseURL = "/api"; // This ensures Axios respects the proxy
+import api from "@/lib/http";
 
 export const useInfluencerStore = defineStore("influencerStore", {
   actions: {
     async getInfluencers(search = "") {
-      const response = await axios.get("/v1/influencers", {
+      const response = await api.get("/v1/influencers", {
         params: search ? { search } : {},
       });
 
@@ -13,24 +12,24 @@ export const useInfluencerStore = defineStore("influencerStore", {
     },
 
     async showInfluencer(slug) {
-      const response = await axios.get(`/v1/influencers/${slug}`);
+      const response = await api.get(`/v1/influencers/${slug}`);
       return response.data.data;
     },
 
     async getAdminInfluencers() {
-      const response = await axios.get("/v1/admin/influencers");
+      const response = await api.get("/v1/admin/influencers");
       return response.data.data;
     },
     async createInfluencer(data) {
-      const response = await axios.post("/v1/admin/influencers", data);
+      const response = await api.post("/v1/admin/influencers", data);
       return response.data.data;
     },
     async updateInfluencer(id, data) {
-      const response = await axios.patch(`/v1/admin/influencers/${id}`, data);
+      const response = await api.patch(`/v1/admin/influencers/${id}`, data);
       return response.data.data;
     },
     async deleteInfluencer(id) {
-      await axios.delete(`/v1/admin/influencers/${id}`);
+      await api.delete(`/v1/admin/influencers/${id}`);
     },
   },
 });
