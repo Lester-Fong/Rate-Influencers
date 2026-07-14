@@ -24,10 +24,10 @@ A polished full-stack influencer discovery and review platform built with **Lara
 <table>
   <tr>
     <td width="50%">
-      <img src="public/assets/public-home.png" alt="RateInfluencers public discovery page" />
+      <img src="/public/assets/public-home.png" alt="RateInfluencers public discovery page" />
     </td>
     <td width="50%">
-      <img src="public/assets/admin-dashboard.png" alt="RateInfluencers administrator dashboard" />
+      <img src="/public/assets/admin-dashboard.png" alt="RateInfluencers administrator dashboard" />
     </td>
   </tr>
   <tr>
